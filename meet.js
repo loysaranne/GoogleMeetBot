@@ -24,13 +24,14 @@ class Meet extends EventEmitter {
         this.meetingLink = undefined;
         this.email = undefined
 
+        this.headless = false;
         this.puppeteer = puppeteer;
         this.browser = undefined;
         this.page = undefined;
         this.ctx = undefined;
 
-        this.isMicEnabled = true;
-        this.isVideoEnabled = true;
+        this.isMicEnabled = false;
+        this.isVideoEnabled = false;
         this.isChatEnabled = undefined;
 
         this.recentMessage = undefined;

@@ -15,24 +15,37 @@ async function toggleVideo() {
 }
 
 async function toggleChat() {
-    var chatBtn = await this.page.waitForXPath('/html/body/div[1]/c-wiz/div[1]/div/div[9]/div[3]/div[10]/div[3]/div[3]/div/div/div[3]/span/button');
+    var chatBtn = await this.page.waitForXPath(
+        '//button[contains(@jsname,"A5il2e")][i[contains(text(), "chat_bubble")]]',
+        { visible: true, timeout: 0 }
+    );
     await chatBtn.click();
+    await new Promise(resolve => setTimeout(resolve, 500));
 }
 
 async function toggleMemberList() {
-    var memberListBtn = await this.page.waitForXPath('/html/body/div[1]/c-wiz/div[1]/div/div[9]/div[3]/div[10]/div[3]/div[3]/div/div/div[2]/span/button');
+    var memberListBtn = await this.page.waitForXPath(
+        '//button[contains(@jsname,"A5il2e")][i[contains(text(), "people_outline")]]',
+        { visible: true, timeout: 0 }
+    );
     await memberListBtn.click();
+    await new Promise(resolve => setTimeout(resolve, 500));
 }
 
 async function chatEnabled() {
-    await this.page.waitForSelector('#bfTqV');
+    await this.page.waitForXPath('//*[@id="bfTqV"]');
     var disabled = await this.page.evaluate(() => {disabled = document.querySelector('#bfTqV'); if (disabled.disabled === false) {return true;} else if (disabled.disabled === true) {return false;}});
     return disabled;
 }
 
 async function sendMessage(message) {
     if (await this.chatEnabled()) {
-        var chat = await this.page.waitForSelector('#bfTqV'); await chat.focus();
+        var chatBubble = await this.page.$x('//button[contains(@jsname,"A5il2e")][i[contains(text(), "chat_bubble")]][contains(@aria-pressed,"true")]');
+        console.log(chatBubble);
+        if (chatBubble.length === 0) {
+            this.toggleChat();
+        }
+        var chat = await this.page.waitForXPath('//*[@id="bfTqV"]', { timeout: 0 }); await chat.focus();
         await this.page.$eval('#bfTqV', (input, message) => {input.value = message; console.log(input); console.log(message)}, message); // replaced `await page.keyboard.type(message)`, because this is a little more instant
         await this.page.keyboard.press('Enter');
     }

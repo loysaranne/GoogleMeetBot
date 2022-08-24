@@ -1,34 +1,35 @@
 const { Meet } = require('../meet');
 const client = new Meet();
 
-config = { meetingLink: 'https://meet.google.com/xyz-wxyz-xyz', email: '', pw: '' };
+config = { meetingLink: 'https://meet.google.com/bzo-ewdm-wga', email: 'juho.meet.bot@gmail.com', pw: 'EjhMCzAPTHH2wPH' };
 
 async function command(client, message) {
     if (message.content.startsWith("!quote")) {
         await client.sendMessage(`${message.author} said, "${message.content.replace("!quote ", "")}" at ${message.time}`);
     }
-
 }
 
 (async () => {
 
     await client.once('ready', async () => {
-        console.log('ready');
+        console.log('Ready, let\'s battle');
     })
 
     await client.login(config);
+
+    await client.sendMessage("I'm here and ready to roll! Just say !start to begin battle >:)");
 
     await client.on('message', async (message) => {
         command(client, message);
     })
 
-    await client.on('memberJoin', async (member) => {
-        await client.sendMessage(`Welcome, ${member.name}!`);
-    })
+    // await client.on('memberJoin', async (member) => {
+    //     await client.sendMessage(`Welcome, ${member.name}!`);
+    // })
 
-    await client.on('memberLeave', async (member) => {
-        await client.sendMessage(`Goodbye, ${member.name}!`);
-    })
+    // await client.on('memberLeave', async (member) => {
+    //     await client.sendMessage(`Goodbye, ${member.name}!`);
+    // })
 
 })()
 
